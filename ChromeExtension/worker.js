@@ -58,7 +58,7 @@ const showSurveyQuestion = async (title, text) => {
 //Asks a single question, saves the answer and sends it to the backend
 const shortSurvey = async (title, text, email, data) => {
   const value = await showSurveyQuestion(title, text);
-  const surveyAnswers = data.surveyAnswers || {}; // Use existing surveyAnswers or create a new object
+  const surveyAnswers = data.surveyAnswers || {};
 
   surveyAnswers["reason"] = value; //saves the answer to survey object
 
@@ -185,7 +185,7 @@ const securityTaskPopup = async (title, text, email, site, taskType) => {
     //If user did not accept
     taskDenied = interactionTime; //Record time of denial
   } else {
-    taskAccepted = interactionTime; //Record time of acceptance
+    taskAccepted = interactionTime;
   }
 
   await updateTask({
@@ -275,6 +275,8 @@ const addEmailPopup = async (email, emails) => {
 
 // check to see if should show new popup
 function shouldShow(initialUser, lastNotificationDate) {
+  console.log("initialUser", initialUser);
+  console.log("Last notification date", lastNotificationDate);
   if (initialUser) return true;
   if (!lastNotificationDate) return true;
 
@@ -285,7 +287,8 @@ function shouldShow(initialUser, lastNotificationDate) {
 
   if (Number.isNaN(last.getTime())) return true;
 
-  return now.getTime() - last.getTime() >= 1000 * 60 * 60;
+  // return now.getTime() - last.getTime() >= 1000 * 60 * 60;
+  return true;
 }
 chrome.runtime.onMessage.addListener(async (request) => {
   if (request.message !== "urlChanged") {
@@ -327,7 +330,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     await addEmailPopup(request.email, []);
     const popupResult = await requestPopupData(request.email, domain);
 
-    data = await popupResult.json();
+    // data = await popupResult.json();
     return;
   }
 

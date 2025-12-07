@@ -51,7 +51,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     (async () => {
       try {
         const body = { email: message.email, url: message.url };
-
+        console.log("body", body);
         const res = await fetch(`${serverURL}/popup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -59,7 +59,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
+        if (res.status === 204) return;
+        console.log("res", JSON.stringify(res));
         const data = await res.json();
         sendResponse({ data });
       } catch (err) {
